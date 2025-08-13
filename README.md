@@ -183,17 +183,17 @@ This simulates another microservice sending an event to the Notification System.
     curl -X POST http://localhost:3000/api/v1/events/receive \
     -H "Content-Type: application/json" \
     -d '{
-        "eventType": "order.created",
-        "payload": {
-        "userId": "d7e9f8a0-b1c2-3d4e-5f6a-7b8c9d0e1f2a",
-        "orderId": "ORD-001-XYZ",
-        "userName": "Confidence Isaiah",
-        "email": "confidence.isaiah@example.com",
-        "phoneNumber": "+2347077773333",
-        "totalAmount": 125.50,
-        "productName": "Wireless Headphones"
-        }
-    }'
+            "eventType": "order.created",
+            "payload": {
+                "userId": "d7e9f8a0-b1c2-3d4e-5f6a-7b8c9d0e1f2a",
+                "orderId": "ORD-001-XYZ",
+                "userName": "Confidence Isaiah",
+                "email": "confidence.isaiah@example.com",
+                "phoneNumber": "+2347077773333",
+                "totalAmount": 125.50,
+                "productName": "Wireless Headphones"
+            }
+        }'
 ```
 
 Expected Response: `HTTP/1.1 202 Accepted` and `{"message": "Event received and processing initiated."}`. This will enqueue notifications for email and in-app based on default mappings.

@@ -1,13 +1,14 @@
 import {
+  Inject,
   Injectable,
-  OnModuleInit,
-  OnModuleDestroy,
   Logger,
+  OnModuleDestroy,
+  OnModuleInit,
 } from '@nestjs/common';
-import { Queue } from 'bullmq';
 import { ConfigService } from '@nestjs/config';
+import { Queue } from 'bullmq';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Inject } from '@nestjs/common';
+import { REDIS_PORT, REDIS_URL } from 'src/secrets/config';
 
 export interface NotificationJob {
   notificationId: string;
@@ -26,20 +27,22 @@ export class QueueService implements OnModuleInit, OnModuleDestroy {
     private readonly configService: ConfigService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {
-    const redisUrl =
-      this.configService.get<string>('redis.host') ?? 'redis://localhost:6379';
+    const redisUrl = this.configService.get<string>('REDIS_URL') ?? REDIS_URL;
+    const redisPort =
+      this.configService.get<string>('REDIS_PORT') ?? REDIS_PORT;
+
     this.notificationQueue = new Queue<NotificationJob>('notifications', {
       connection: {
         host: new URL(redisUrl).hostname,
-        port: parseInt(new URL(redisUrl).port || '6379', 10),
+        port: parseInt(redisPort || '6379', 10),
       },
       defaultJobOptions: {
         attempts: 3, // Retry failed jobs 3 times
         backoff: {
           type: 'exponential',
-          delay: 1000, 
+          delay: 1000,
         },
-        removeOnComplete: true, 
+        removeOnComplete: true,
         removeOnFail: false,
       },
     });

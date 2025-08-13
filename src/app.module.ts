@@ -1,23 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { EventsModule } from './events/events.module';
-import { AdminModule } from './admin/admin.module';
-
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
-
+import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
+import channelsConfig from './config/channels.config';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
-import channelsConfig from './config/channels.config';
-import { NotificationWorkerModule } from './workers/notification-worker.module';
+import { EventsModule } from './events/events.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { UsersModule } from './users/users.module';
 import { QueueModule } from './utils/queue/queue.module';
+import { NotificationWorkerModule } from './workers/notification-worker.module';
 
 @Module({
   imports: [

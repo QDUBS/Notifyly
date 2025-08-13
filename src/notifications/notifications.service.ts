@@ -228,7 +228,7 @@ export class NotificationsService {
       where: { id: notificationId },
     });
   }
- 
+
   /**
    * Retrieves notifications based on filters.
    * @param filters Filtering criteria (status, type, channel, userId, correlationId).

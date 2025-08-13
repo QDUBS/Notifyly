@@ -1,7 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { NotificationsService } from '../notifications/notifications.service';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Inject } from '@nestjs/common';
+import { NotificationsService } from '../notifications/notifications.service';
 import { ReceiveEventDto } from './dto/receive-event.dto';
 
 @Injectable()

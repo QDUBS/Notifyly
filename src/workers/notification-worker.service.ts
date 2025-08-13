@@ -10,6 +10,7 @@ import { Job, Worker } from 'bullmq';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { NotificationStatus } from 'src/notifications/entities/notification.entity';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { REDIS_PORT, REDIS_URL } from 'src/secrets/config';
 import { ChannelSender } from 'src/utils/channels/channel.interface';
 import { EmailService } from 'src/utils/channels/email.service';
 import { InAppService } from 'src/utils/channels/in-app.service';
@@ -31,11 +32,13 @@ export class NotificationWorkerService
     private readonly inAppService: InAppService,
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {
-    const redisUrl =
-      this.configService.get<string>('redis.host') ?? 'redis://localhost:6379';
+    const redisUrl = this.configService.get<string>('REDIS_URL') ?? REDIS_URL;
+    const redisPort =
+      this.configService.get<string>('REDIS_PORT') ?? REDIS_PORT;
+
     const connection = {
       host: new URL(redisUrl).hostname,
-      port: parseInt(new URL(redisUrl).port || '6379', 10),
+      port: parseInt(redisPort || '6379', 10),
     };
 
     this.worker = new Worker<NotificationJob>(
@@ -68,7 +71,7 @@ export class NotificationWorkerService
         this.logger.debug(
           `Worker: Job ${job.id} completed. Result: ${JSON.stringify(result)}`,
         );
-        // Update notification status to sent/delivered in database
+        // Update notification status to sent/delivered
         await this.notificationsService.updateNotificationStatus(
           job.data.notificationId,
           NotificationStatus.SENT,
@@ -80,7 +83,7 @@ export class NotificationWorkerService
       this.logger.error(
         `Worker: Job ${job.id} failed with error: ${err.message}. Attempts made: ${job.attemptsMade}`,
       );
-      // Update notification status to 'failed in database
+      // Update notification status to 'failed'
       await this.notificationsService.updateNotificationStatus(
         job.data.notificationId,
         NotificationStatus.FAILED,
