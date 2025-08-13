@@ -1,7 +1,7 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReceiveEventDto } from './dto/receive-event.dto';
+import { EventsService } from './events.service';
 
 @ApiTags('Events')
 @Controller('api/v1/events')

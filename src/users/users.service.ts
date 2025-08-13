@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import {
-  UserPreference,
-  UserPreferencesJson,
-} from 'src/users/entities/user-preference.entity';
-import { UpdateUserPreferencesDto } from './dto/update-user-preferences.dto';
-import { UserPreferencesResponseDto } from './dto/user-preferences-response.dto';
+import { NotificationDto } from 'src/notifications/dto/create-notification.dto';
 import {
   Notification,
   NotificationStatus,
 } from 'src/notifications/entities/notification.entity';
-import { NotificationDto } from 'src/notifications/dto/create-notification.dto';
+import {
+  UserPreference,
+  UserPreferencesJson,
+} from 'src/users/entities/user-preference.entity';
+import { Repository } from 'typeorm';
+import { UpdateUserPreferencesDto } from './dto/update-user-preferences.dto';
+import { UserPreferencesResponseDto } from './dto/user-preferences-response.dto';
 
 @Injectable()
 export class UsersService {
@@ -90,13 +90,11 @@ export class UsersService {
       where: {
         user_id: userId,
         channel: 'in_app',
-        // Only show sent/delivered notifications to the user
-        status: NotificationStatus.SENT, // Or DELIVERED if DLRs are implemented
+        status: NotificationStatus.SENT,
       },
       order: {
-        created_at: 'DESC', // Latest first
+        created_at: 'DESC',
       },
-      // Take 50 for example, pagination would be added for real apps
       take: 50,
     });
 

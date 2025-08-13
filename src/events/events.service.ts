@@ -13,10 +13,7 @@ export class EventsService {
 
   async handleIncomingEvent(eventDto: ReceiveEventDto): Promise<void> {
     this.logger.debug(`Received incoming event: ${eventDto.eventType}`);
-    // In a real-world scenario, you might add more robust validation or
-    // schema checks for the event payload here before passing it on.
-
-    // Pass the event to the NotificationService for core logic
+    
     await this.notificationsService.processEvent(
       eventDto.eventType,
       eventDto.payload,
